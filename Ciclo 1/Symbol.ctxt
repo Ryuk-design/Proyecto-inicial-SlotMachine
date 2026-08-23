@@ -1,0 +1,25 @@
+#BlueJ class context
+comment0.target=Symbol
+comment0.text=\r\n\ Write\ a\ description\ of\ class\ Symbol\ here.\r\n\ \r\n\ @author\ (Samuel\ Ahumada)\ \r\n\ @version\ (a\ version\ number\ or\ a\ date)\r\n
+comment1.params=color\ x\ y
+comment1.target=Symbol(java.lang.String,\ int,\ int)
+comment1.text=\r\n\ @author\ Samuel\ Ahumada\r\n\ @param\ color\ asigna\ color\ a\ Symbol\r\n\ @param\ x\ asigna\ posicion\ horizontal\ a\ Symbol\r\n\ @param\ y\ asigna\ posicion\ vertical\ a\ Symbol\r\n
+comment2.params=
+comment2.target=java.lang.String\ getColor()
+comment2.text=\r\n\ @author\ Samuel\ Ahumada\r\n\ @return\ el\ color\ asignado\ a\ Symbol\r\n
+comment3.params=
+comment3.target=void\ makeVisible()
+comment3.text=\r\n\ Hace\ visible\ Symbol\ en\ canvas.\r\n\ @author\ Samuel\ Ahumada\r\n
+comment4.params=
+comment4.target=void\ makeInvisible()
+comment4.text=\r\n\ Hace\ invisible\ Symbol\ en\ canvas.\r\n\ @author\ Samuel\ Ahumada\r\n
+comment5.params=sym2
+comment5.target=boolean\ isSameSymbol(Symbol)
+comment5.text=\r\n\ Compara\ el\ color\ de\ dos\ Symbols\ y\ dice\ si\ son\ iguales\ o\ distintos\r\n\ @author\ Samuel\ Ahumada\r\n
+comment6.params=x\ y
+comment6.target=void\ setPosition(int,\ int)
+comment6.text=\r\n\ Cambia\ la\ posicion\ horizontal\ y\ vertical\ de\ Symbol\r\n\ @author\ Samuel\ Ahumada\r\n\ @param\ x\ asigna\ posicion\ horizontal\ a\ Symbol\r\n\ @param\ y\ asigna\ posicion\ vertical\ a\ Symbol\r\n
+comment7.params=
+comment7.target=boolean\ isVisible()
+comment7.text=\r\n\ getter\ de\ visibilidad\r\n\ @author\ Samuel\ Ahumada\r\n
+numComments=8
