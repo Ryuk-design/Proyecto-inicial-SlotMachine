@@ -253,15 +253,6 @@ public class SlotMachine
      */
     public void placeSymbol(int wheel, String symbol)
     {
-        // Agregacion de validacion CICLO 2 
-        // Verifica si la rueda que se le quiere cambiar el simbolo esta bloqueada
-        if(wheels.get(wheel - 1).getLocked())
-        {
-            lastOperationOk = false;
-            showError("La rueda esta bloqueada, entonces no se le puede forzar un simbolo a mostrar");
-            return;
-        }
-        //
         if(wheels.size() == 0)
         {
             lastOperationOk = false;
@@ -274,6 +265,16 @@ public class SlotMachine
         {
             wheel = wheels.size();
         }
+        
+        // Agregacion de validacion CICLO 2 
+        // Verifica si la rueda que se le quiere cambiar el simbolo esta bloqueada
+        if(getWheel(wheel).getLocked())
+        {
+            lastOperationOk = false;
+            showError("La rueda esta bloqueada, entonces no se le puede forzar un simbolo a mostrar");
+            return;
+        }
+        //
         
         boolean res = wheels.get(wheel - 1).placeSymbol(symbol);
         lastOperationOk = res;
@@ -317,21 +318,22 @@ public class SlotMachine
      */
     public void spin(int wheel)
     {
-        // Agregacion de validacion CICLO 2
-        // Verifica si la rueda esta bloqueada
-        if(wheels.get(wheel - 1).getLocked())
-        {
-            lastOperationOk = false;
-            showError("La rueda esta bloqueada, entonces no se puede girar");
-            return;
-        }
-        //
         if(wheels.size() == 0)
         {
             lastOperationOk = false;
             showError("No hay ruedas existentes");
             return;
         }
+        
+        // Agregacion de validacion CICLO 2
+        // Verifica si la rueda esta bloqueada
+        if(getWheel(wheel).getLocked())
+        {
+            lastOperationOk = false;
+            showError("La rueda esta bloqueada, entonces no se puede girar");
+            return;
+        }
+        //
         
         if(wheel < 1)
         {
@@ -343,7 +345,7 @@ public class SlotMachine
             wheel = wheels.size();
         }
         
-        wheels.get(wheel - 1).spin();
+        getWheel(wheel).spin();
         lastOperationOk = true;
         updateJackpotStatus();
     }
@@ -473,8 +475,8 @@ public class SlotMachine
             return;
         }
         
-        Wheel w1 = wheels.get(wheel1 - 1);
-        wheels.set(wheel1 - 1, wheels.get(wheel2 - 1));
+        Wheel w1 = getWheel(wheel1);
+        wheels.set(wheel1 - 1, getWheel(wheel2));
         wheels.set(wheel2 - 1, w1);
         lastOperationOk = true;
     }
@@ -493,14 +495,14 @@ public class SlotMachine
             wheel = wheels.size();
         }
         
-        if(wheels.get(wheel - 1).getLocked())
+        if(getWheel(wheel).getLocked())
         {
             lastOperationOk = false;
             showError("La rueda ya esta bloqueada");
             return;
         }
         
-        wheels.get(wheel - 1).setLocked(true);
+        getWheel(wheel).setLocked(true);
         lastOperationOk = true;
     }
     
@@ -519,14 +521,14 @@ public class SlotMachine
             wheel = wheels.size();
         }
         
-        if(!wheels.get(wheel - 1).getLocked())
+        if(!getWheel(wheel).getLocked())
         {
             lastOperationOk = false;
             showError("La rueda ya esta desbloqueada");
             return;
         }
         
-        wheels.get(wheel - 1).setLocked(false);
+        getWheel(wheel).setLocked(false);
         lastOperationOk = true;
     }
     
@@ -560,7 +562,7 @@ public class SlotMachine
             wheel = wheels.size();
         }
         
-        if(wheels.get(wheel - 1).getLocked())
+        if(getWheel(wheel).getLocked())
         {
             lastOperationOk = false;
             showError("La rueda esta bloqueada y no se puede girar");
@@ -568,7 +570,7 @@ public class SlotMachine
         }
         
         steps = Math.abs(steps);
-        wheels.get(wheel - 1).spin(steps);
+        getWheel(wheel).spin(steps);
         lastOperationOk = true;
         updateJackpotStatus();
     }
