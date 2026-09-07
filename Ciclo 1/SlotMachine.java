@@ -89,8 +89,9 @@ public class SlotMachine
         Wheel whl = new Wheel(0, 0);
         if(pos < 1){
             pos = 1;
-        } else if (pos > wheels.size() + 1){pos = wheels.size() + 1;}
-        
+        } else if(pos > wheels.size() + 1){
+            pos = wheels.size() + 1;
+        }
         for(int i = 0; i < masterSymbols.size(); i++){
             whl.addSymbol(i + 1, masterSymbols.get(i).getColor());
         }
@@ -104,6 +105,7 @@ public class SlotMachine
     
     /**
      * Elimina una rueda en una posicion determinada. 
+     * @param 
      */
     public void delWheel(int pos){
         if(wheels.size() == 0){

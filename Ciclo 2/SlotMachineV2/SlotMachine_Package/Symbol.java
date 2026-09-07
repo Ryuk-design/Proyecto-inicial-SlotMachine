@@ -1,8 +1,12 @@
+package SlotMachine_Package;
 /**
- * Write a description of class Symbol here.
- * 
+ * Representa un simbolo individual mostrado por una rueda de la maquina
+ * tragamonedas, identificado por un color unico y dibujado como un circulo
+ * en el canvas. Permite consultar su color, controlar su visibilidad,
+ * cambiar su posicion en pantalla y compararse con otro simbolo para
+ * determinar si representan el mismo color.
  * @author (Samuel Ahumada) 
- * @version (a version number or a date)
+ * @version (1.0)
  */
 public class Symbol
 {
@@ -17,7 +21,8 @@ public class Symbol
      * @param x asigna posicion horizontal a Symbol
      * @param y asigna posicion vertical a Symbol
      */
-    public Symbol(String color, int x, int y){
+    public Symbol(String color, int x, int y)
+    {
         this.color = color;
         figure = new Circle(DIAMETER, x, y, this.color);
         isVisible = false;
@@ -27,7 +32,8 @@ public class Symbol
      * @author Samuel Ahumada
      * @return el color asignado a Symbol
      */
-    public String getColor(){
+    public String getColor()
+    {
         return color;
     }
     
@@ -35,16 +41,19 @@ public class Symbol
      * Hace visible Symbol en canvas.
      * @author Samuel Ahumada
      */
-    public void makeVisible(){
+    public void makeVisible()
+    {
         figure.makeVisible();
         isVisible = true;
     }
     
+
     /**
      * Hace invisible Symbol en canvas.
      * @author Samuel Ahumada
      */
-    public void makeInvisible(){
+    public void makeInvisible()
+    {
         figure.makeInvisible();
         isVisible = false;
     }
@@ -53,7 +62,8 @@ public class Symbol
      * Compara el color de dos Symbols y dice si son iguales o distintos
      * @author Samuel Ahumada
      */
-    public boolean isSameSymbol(Symbol sym2){
+    public boolean isSameSymbol(Symbol sym2)
+    {
         if(color.equals(sym2.getColor())){
             return true;
         }else{return false;}
@@ -65,7 +75,8 @@ public class Symbol
      * @param x asigna posicion horizontal a Symbol
      * @param y asigna posicion vertical a Symbol
      */
-    public void setPosition(int x, int y){
+    public void setPosition(int x, int y)
+    {
         figure.setPosition(x, y);
     }
     
@@ -73,7 +84,8 @@ public class Symbol
      * getter de visibilidad
      * @author Samuel Ahumada
      */
-    public boolean isVisible(){
+    public boolean isVisible()
+    {
         return isVisible;
     }
 }
