@@ -161,7 +161,8 @@ public class Wheel
      */
     public void spin()
     {
-        if(symbols.size() == 0){
+        if(symbols.size() == 0)
+        {
             return;
         }
         

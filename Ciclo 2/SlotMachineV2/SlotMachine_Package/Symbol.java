@@ -64,9 +64,13 @@ public class Symbol
      */
     public boolean isSameSymbol(Symbol sym2)
     {
-        if(color.equals(sym2.getColor())){
+        if(color.equals(sym2.getColor()))
+        {
             return true;
-        }else{return false;}
+        }else
+        {
+            return false;
+        }
     }
     
     /**

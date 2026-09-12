@@ -28,9 +28,11 @@ public class spinStepsTests
     }
     
     @Test
+    //Sustentacion Samuel
     public void AfCvShouldSpinAnyNumberOfStepsInIntegerRange()
     {
         machine.placeSymbol(1, "red");
+        // machine.makeVisible();
         machine.spin(1, 12);
         assertEquals(machine.getWheel(1).getCurrentSymbol().getColor(), "green");
         assertTrue(machine.ok());
