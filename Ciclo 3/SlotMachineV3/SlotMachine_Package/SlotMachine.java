@@ -1,6 +1,8 @@
 package SlotMachine_Package;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
+import java.util.Random;
+
 /**
  * Simulador de una maquina tragamonedas compuesta por un conjunto de ruedas (Wheels)
  * donde cada rueda (Wheel) muestra un simbolo (Symbol) de un color del estandar CSS.
@@ -23,12 +25,12 @@ public class SlotMachine
     private boolean lastOperationOk;
     private static final String NORMAL_FRAME_COLOR = "gray";
     private static final String JACKPOT_FRAME_COLOR = "gold";
-    private static final int MARGIN = 40; 
-    private static final int GAP = 20;      
-    private static final int FRAME_X = 40;  
-    private static final int FRAME_Y = 40;
-    private static final int FRAME_HEIGHT = 260;
-    private static final int FRAME_WIDTH = 1500;
+    private static final int MARGIN = 10; 
+    private static final int GAP = 5;      
+    private static final int FRAME_X = 10;  
+    private static final int FRAME_Y = 10;
+    private static final int FRAME_HEIGHT = 65;
+    private static final int FRAME_WIDTH = 1515;
 
     /**
      * constructor, lastOperationOk se inicializa en true.
@@ -127,6 +129,7 @@ public class SlotMachine
     public void addWheel(int pos)
     {
         Wheel whl = new Wheel(0, 0);
+        
         if(pos < 1)
         {
             pos = 1;
@@ -538,7 +541,12 @@ public class SlotMachine
      * @param steps cantidad de pasos
      */
     public void spin(int wheel, int steps)
-    {
+    {   
+        if(steps == 0){
+            lastOperationOk = true;
+            return;
+        }
+        
         if(wheels.size() == 0)
         {
             lastOperationOk = false;
@@ -569,7 +577,11 @@ public class SlotMachine
             return;
         }
         
-        steps = Math.abs(steps);
+        /**
+         * Modificacion ciclo 3
+         * Se retiro una variable que guardaba steps con valor absoluto, ya que en el problema de la maraton se pide que en caso de que steps sea negativo
+         * la rueda debe caminar en sentido contrario.
+        */ 
         getWheel(wheel).spin(steps);
         lastOperationOk = true;
         updateJackpotStatus();
@@ -677,5 +689,34 @@ public class SlotMachine
         
         Symbol s = masterSymbols.get(pos - 1);
         return s;
+    }
+    
+    //CICLO 3
+    
+    /**
+     * Crea una instancia de SlotMachine con un numero igual de ruedas y simbolos con color aleatorio, gira las ruedas para que inicialicen aleatoriamente
+     * @param n numero de ruedas
+     */
+    public SlotMachine(int n)
+    { 
+        wheels = new ArrayList<Wheel>();
+        masterSymbols = new ArrayList<Symbol>();
+        availableColors = Canvas.getAvailableColorNames();
+        frame = new Rectangle(FRAME_HEIGHT, FRAME_WIDTH, FRAME_X, FRAME_Y, NORMAL_FRAME_COLOR);
+        isVisible = false;
+        lastOperationOk = true;
+        Random random = new Random();
+        
+        for(int i = 0; i < n; i++)
+        {
+            addSymbol(i + 1, availableColors.get(random.nextInt(availableColors.size())));
+        }
+        
+        for(int i = 0; i < n; i++)
+        {
+            addWheel(i + 1);
+        }
+        
+        spin();
     }
 }    

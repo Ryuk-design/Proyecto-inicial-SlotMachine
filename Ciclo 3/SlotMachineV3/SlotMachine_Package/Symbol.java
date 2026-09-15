@@ -13,7 +13,7 @@ public class Symbol
     private Circle figure;
     private String color;
     private boolean isVisible;
-    public static final int DIAMETER = 80;
+    public static final int DIAMETER = 20;
 
     /**
      * @author Samuel Ahumada

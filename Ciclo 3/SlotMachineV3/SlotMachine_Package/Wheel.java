@@ -21,8 +21,8 @@ public class Wheel
     private boolean isVisible;
     private int xPosition;
     private int yPosition;
-    public static final int WINDOW_WIDTH = 100; 
-    public static final int WINDOW_HEIGHT = 180; 
+    public static final int WINDOW_WIDTH = 25; 
+    public static final int WINDOW_HEIGHT = 45; 
     private static final String COLOR = "red";
     // ciclo 2
     private boolean locked = false;
@@ -243,10 +243,62 @@ public class Wheel
      */
     public void spin(int steps)
     {
-        for(int i = 0; i < steps; i++)
+        /**
+        * Modificacion ciclo 3
+        * Se agrego un condicional para verificar que existan simbolos en la rueda
+        */
+        if(symbols.size() == 0)
         {
-            index = (index + 1) % symbols.size();
-            updateSymbol();
+            return;
+        }
+        
+        /**
+        * Se agrego condicional para verificar si la direccion de los pasos. 
+        */
+        if(steps > 0)
+        {
+            for(int i = 0; i < steps; i++)
+            {
+                index = (index + 1) % symbols.size();
+                updateSymbol();
+                
+                if(isVisible)
+                {
+                    try
+                    {
+                        Thread.sleep(100);
+                    }
+                    catch(InterruptedException e)
+                    {
+                        Thread.currentThread().interrupt();
+                    }
+                }
+            }
+        }
+        else
+        {
+            for(int i = 0; i < -steps; i++)
+            {
+                index = index - 1;
+                
+                if(index < 0)
+                {
+                    index = symbols.size() - 1;
+                }
+                
+                updateSymbol();
+                if(isVisible)
+                {
+                    try
+                    {
+                        Thread.sleep(100);
+                    }
+                    catch(InterruptedException e)
+                    {
+                        Thread.currentThread().interrupt();
+                    }
+                }
+            }
         }
     }
     
