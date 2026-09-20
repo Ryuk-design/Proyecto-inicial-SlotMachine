@@ -615,6 +615,7 @@ public class SlotMachine
         }
         
         int count = 0;
+
         for(int i = 0; i < masterSymbols.size(); i++)
         {
             for(int j = 0; j < setSymbols.length; j++)
@@ -658,6 +659,13 @@ public class SlotMachine
      */
     public Wheel getWheel(int wheel)
     {
+        // Nueva condicion ciclo 3
+        if(masterSymbols.size() == 0)
+        {
+            throw new IllegalArgumentException("SlotMachine no tiene ruedas");
+        }
+        // 
+        
         if(wheel < 1)
         {
             wheel = 1;
@@ -678,6 +686,13 @@ public class SlotMachine
      */
     public Symbol getSymbol(int pos)
     {
+        // Nueva condicion ciclo 3
+        if(masterSymbols.size() == 0)
+        {
+            throw new IllegalArgumentException("SlotMachine no tiene simbolos");
+        }
+        //
+        
         if(pos < 1)
         {
             pos = 1;

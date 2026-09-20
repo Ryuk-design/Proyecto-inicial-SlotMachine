@@ -6,7 +6,7 @@ package SlotMachine_Package;
  * @author (Samuel Ahumada - Nerieth Villota)
  * @version (1.0)
  */
-public class Shape
+public abstract class Shape
 {
     protected int xPosition;
     protected int yPosition;
@@ -31,7 +31,7 @@ public class Shape
      * Dibuja la figura en el Canvas con las especificaciones actuales
      * Cada figura concreta define su propia forma geometrica
      */
-    protected void draw(){}
+    protected abstract void draw();
 
     /**
      * Borra la figura del Canvas si estaba visible

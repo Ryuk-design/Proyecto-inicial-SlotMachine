@@ -279,7 +279,7 @@ public class Wheel
         {
             for(int i = 0; i < -steps; i++)
             {
-                index = index - 1;
+                index--;
                 
                 if(index < 0)
                 {
@@ -287,6 +287,7 @@ public class Wheel
                 }
                 
                 updateSymbol();
+                
                 if(isVisible)
                 {
                     try
