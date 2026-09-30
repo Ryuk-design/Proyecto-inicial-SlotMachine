@@ -12,7 +12,7 @@ import java.util.Random;
  * fijar simbolos en las ruedas
  * bloquear y desbloquear ruedas individualmente
  * consultar configuracion de ruedas, simbolos disponibles y si la maquina se encuentra en estado de Jackpot.
- * @author (Samuel Ahumada - Nerieth Villota) 
+ * @author (Samuel Ahumada) 
  * @version (2.0)
  */
 public class SlotMachine
@@ -184,6 +184,8 @@ public class SlotMachine
      */
     public void addSymbol(int pos, String color)
     {
+        lastOperationOk = false;
+        
         if(availableColors.contains(color) == false)
         {
             lastOperationOk = false;
@@ -216,6 +218,8 @@ public class SlotMachine
      */
     public void delSymbol(String symbol)
     {
+        lastOperationOk = false;
+        
         // Agregacion de validacion CICLO 2 
         // Verifica si hay alguna rueda bloqueada
         for(int i = 0; i < wheels.size(); i++)
@@ -228,7 +232,9 @@ public class SlotMachine
             }
         }
         //
-        for(int i = 0; i < masterSymbols.size(); i++)
+        boolean findSymbol = false;
+        
+        for(int i = 0; i < masterSymbols.size() && !findSymbol; i++)
         {
             if (symbol.equals(masterSymbols.get(i).getColor()))
             {
@@ -242,7 +248,7 @@ public class SlotMachine
                 updateJackpotStatus();
                 availableColors.add(symbol);
                 lastOperationOk = true;
-                return;
+                findSymbol = true;
             }
         }
         
@@ -256,6 +262,8 @@ public class SlotMachine
      */
     public void placeSymbol(int wheel, String symbol)
     {
+        lastOperationOk = false;
+        
         if(wheels.size() == 0)
         {
             lastOperationOk = false;
@@ -388,6 +396,7 @@ public class SlotMachine
      */
     public int distinctSymbols()
     {
+        lastOperationOk = false;
         String[] config = configuration();
         ArrayList<String> distinct = new ArrayList<String>();
         
@@ -399,6 +408,7 @@ public class SlotMachine
             }
         }
         
+        lastOperationOk = true;
         return distinct.size();
     }
     
@@ -422,6 +432,7 @@ public class SlotMachine
      */
     public void makeInvisible()
     {
+        lastOperationOk = false;
         frame.makeInvisible();
         
         for(int i = 0; i < wheels.size(); i++)
@@ -437,6 +448,7 @@ public class SlotMachine
     {
         makeInvisible();
         lastOperationOk = true;
+        System.exit(0);
     }
     
     /**
