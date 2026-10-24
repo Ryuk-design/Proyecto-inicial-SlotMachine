@@ -13,7 +13,7 @@ public class SlotMachineC4Test
 
     // Lefty Tests
     @Test
-    public void AfLeftyShouldCopyLeftWheelOnSpinAll()
+    public void AfLeftyShouldCopyLeftWheelOnSpinAll() throws SlotMachineException
     {
         machine = new SlotMachine();
         
@@ -36,7 +36,7 @@ public class SlotMachineC4Test
     }
 
     @Test
-    public void AfLeftyShouldCopyLeftWheelOnSpinOne()
+    public void AfLeftyShouldCopyLeftWheelOnSpinOne() throws SlotMachineException
     {
         machine = new SlotMachine();
         
@@ -55,7 +55,7 @@ public class SlotMachineC4Test
     }
 
     @Test
-    public void AfLeftyShouldCopyLeftWheelAndIgnoreSteps()
+    public void AfLeftyShouldCopyLeftWheelAndIgnoreSteps() throws SlotMachineException
     {
         machine = new SlotMachine();
         
@@ -74,7 +74,7 @@ public class SlotMachineC4Test
     }
 
     @Test
-    public void AfLeftyShouldNotChangeIfOnlyLeftWheelSpins()
+    public void AfLeftyShouldNotChangeIfOnlyLeftWheelSpins() throws SlotMachineException
     {
         machine = new SlotMachine();
         
@@ -93,7 +93,7 @@ public class SlotMachineC4Test
     }
 
     @Test
-    public void AfLeftyShouldNotCopyIfLocked()
+    public void AfLeftyShouldNotCopyIfLocked() throws SlotMachineException
     {
         machine = new SlotMachine();
         
@@ -107,13 +107,23 @@ public class SlotMachineC4Test
         machine.placeSymbol(1, "red");
         machine.placeSymbol(2, "blue");
         machine.lock(2);
-        machine.spin(2);
+        
+        try
+        {
+            machine.spin(2);
+            fail();
+        }
+        catch(SlotMachineException e)
+        {
+            assertEquals(SlotMachineException.WHEEL_LOCKED, e.getMessage());
+        }
+        
         assertEquals("blue", machine.getWheel(2).getCurrentSymbol().getColor());
         assertFalse(machine.ok());
     }
 
     @Test
-    public void AfLeftyShouldCopyNewLeftNeighborAfterSwap()
+    public void AfLeftyShouldCopyNewLeftNeighborAfterSwap() throws SlotMachineException
     {
         machine = new SlotMachine();
         
@@ -134,7 +144,7 @@ public class SlotMachineC4Test
     }
 
     @Test
-    public void AfLeftyShouldNotFailIfLeftWheelHasNoSymbols()
+    public void AfLeftyShouldNotFailIfLeftWheelHasNoSymbols() throws SlotMachineException
     {
         machine = new SlotMachine();
         machine.addWheel(1);
@@ -146,7 +156,7 @@ public class SlotMachineC4Test
     // Rebel Tests
     
     @Test
-    public void AfCvRebelShouldNotBeLocked()
+    public void AfCvRebelShouldNotBeLocked() throws SlotMachineException
     {
         machine = new SlotMachine();
         
@@ -156,13 +166,23 @@ public class SlotMachineC4Test
         }
         
         machine.addWheel("rebel", 1);
-        machine.lock(1);
+        
+        try
+        {
+            machine.lock(1);
+            fail();
+        }
+        catch(SlotMachineException e)
+        {
+            assertEquals(SlotMachineException.WHEEL_CANNOT_LOCK, e.getMessage());
+        }
+        
         assertFalse(machine.getWheel(1).getLocked());
         assertFalse(machine.ok());
     }
 
     @Test
-    public void AfCvRebelShouldNotBeSwapped()
+    public void AfCvRebelShouldNotBeSwapped() throws SlotMachineException
     {
         machine = new SlotMachine();
         
@@ -176,13 +196,23 @@ public class SlotMachineC4Test
         machine.placeSymbol(1, "red");
         machine.placeSymbol(2, "blue");
         String[] orig = machine.configuration();
-        machine.swap(1, 2);
+        
+        try
+        {
+            machine.swap(1, 2);
+            fail();
+        }
+        catch(SlotMachineException e)
+        {
+            assertEquals(SlotMachineException.WHEEL_CANNOT_SWAP, e.getMessage());
+        }
+        
         assertArrayEquals(orig, machine.configuration());
         assertFalse(machine.ok());
     }
 
     @Test
-    public void AfCvRebelShouldNotBeDeleted()
+    public void AfCvRebelShouldNotBeDeleted() throws SlotMachineException
     {
         machine = new SlotMachine();
         
@@ -192,28 +222,38 @@ public class SlotMachineC4Test
         }
         
         machine.addWheel("rebel", 1);
-        machine.delWheel(1);
+        
+        try
+        {
+            machine.delWheel(1);
+            fail();
+        }
+        catch(SlotMachineException e)
+        {
+            assertEquals(SlotMachineException.WHEEL_CANNOT_DELETE, e.getMessage());
+        }
+        
         assertEquals(1, machine.configuration().length);
         assertFalse(machine.ok());
-    }
+    }   
     
     //Ephemeral Tests
 
     @Test
-    public void AfEphemeralShouldGetSmallerOnSpin()
+    public void AfEphemeralShouldGetSmallerOnSpin() throws SlotMachineException
     {
         machine = new SlotMachine();
         machine.addSymbol("ephemeral", 1, "red");
         machine.addWheel(1);
-        int before = machine.getWheel(1).getCurrentSymbol().getDiameter();
+        int before = machine.getWheel(1).getCurrentSymbol().getSize();
         machine.spin();
-        int after = machine.getWheel(1).getCurrentSymbol().getDiameter();
+        int after = machine.getWheel(1).getCurrentSymbol().getSize();
         assertTrue(after < before);
         assertTrue(machine.ok());
     }
 
     @Test
-    public void AfEphemeralShouldStopGettingSmaller()
+    public void AfEphemeralShouldStopGettingSmaller() throws SlotMachineException
     {
         machine = new SlotMachine();
         machine.addSymbol("ephemeral", 1, "red");
@@ -224,27 +264,27 @@ public class SlotMachineC4Test
             machine.spin();
         }
         
-        int last = machine.getWheel(1).getCurrentSymbol().getDiameter();
+        int last = machine.getWheel(1).getCurrentSymbol().getSize();
         machine.spin();
-        assertEquals(last, machine.getWheel(1).getCurrentSymbol().getDiameter());
+        assertEquals(last, machine.getWheel(1).getCurrentSymbol().getSize());
         assertTrue(last > 0);
     }
 
     @Test
-    public void NormalSymbolShouldNotGetSmallerOnSpin()
+    public void NormalSymbolShouldNotGetSmallerOnSpin() throws SlotMachineException
     {
         machine = new SlotMachine();
         machine.addSymbol(1, "red");
         machine.addWheel(1);
-        int before = machine.getWheel(1).getCurrentSymbol().getDiameter();
+        int before = machine.getWheel(1).getCurrentSymbol().getSize();
         machine.spin();
-        assertEquals(before, machine.getWheel(1).getCurrentSymbol().getDiameter());
+        assertEquals(before, machine.getWheel(1).getCurrentSymbol().getSize());
     }
 
     //Shy Tests
 
     @Test
-    public void AfShyShouldChangeVisibilityOnEverySpin()
+    public void AfShyShouldChangeVisibilityOnEverySpin() throws SlotMachineException
     {
         machine = new SlotMachine();
         machine.addSymbol("shy", 1, "red");
@@ -259,7 +299,7 @@ public class SlotMachineC4Test
     }
 
     @Test
-    public void AfShyShouldNotToggleOnPlaceSymbol()
+    public void AfShyShouldNotToggleOnPlaceSymbol() throws SlotMachineException
     {
         machine = new SlotMachine();
         machine.addSymbol("shy", 1, "red");
@@ -269,7 +309,7 @@ public class SlotMachineC4Test
     }
 
     @Test
-    public void AfNormalSymbolShouldNotHide()
+    public void AfNormalSymbolShouldNotHide() throws SlotMachineException
     {
         machine = new SlotMachine();
         machine.addSymbol(1, "red");

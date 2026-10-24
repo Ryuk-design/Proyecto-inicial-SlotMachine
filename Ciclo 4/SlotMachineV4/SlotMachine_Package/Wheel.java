@@ -56,7 +56,7 @@ public class Wheel
     /**
      * Actualiza la posicion y visibilidad de el Symbol de la posicion index actual para que quede centrado en Wheel
      */
-    private void updateSymbol()
+    protected void updateSymbol()
     {
         if(symbols.size() == 0)
         {
@@ -68,9 +68,10 @@ public class Wheel
             symbols.get(i).makeInvisible();
         }
         
-        int circleX = xPosition + (WINDOW_WIDTH - Symbol.DIAMETER) / 2;
-        int circleY = yPosition + (WINDOW_HEIGHT - Symbol.DIAMETER) / 2;
         Symbol currSym = symbols.get(index);
+        int diameter = currSym.getSize();
+        int circleX = xPosition + (WINDOW_WIDTH - diameter) / 2;
+        int circleY = yPosition + (WINDOW_HEIGHT - diameter) / 2;
         currSym.setPosition(circleX, circleY);
         
         if(isVisible) 

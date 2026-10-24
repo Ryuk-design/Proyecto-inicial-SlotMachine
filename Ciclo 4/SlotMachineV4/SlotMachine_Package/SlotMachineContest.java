@@ -36,14 +36,15 @@ public abstract class SlotMachineContest
      * Resuelve el problema de la maraton
      * @param n cantidad de ruedas y simbolos 3 <= n <= 50
      * @return un arreglo que contiene los pasos que debe realizar SlotMachine para quedar en estado de Jackpot
+     * @throws SlotMachineException INVALID_AMOUNT si n es menor que 3 o mayor que 50
      */
-    public static int[][] solve(int n) 
+    public static int[][] solve(int n) throws SlotMachine_Package.SlotMachineException 
     {
         // Validacion inicial del problema
         
         if(n < 3 || n > 50) 
         {
-            return new int[0][0];
+            throw new SlotMachineException(SlotMachineException.INVALID_AMOUNT);
         }
         
         // Se crea un arreglo que guardara los indices a los que apunta cada rueda de forma aleatoria
@@ -196,14 +197,15 @@ public abstract class SlotMachineContest
     /**
      * Simulacion del funcionamiento del algoritmo de SlotMachine
      * @param n cantidad de ruedas y simbolos 3 <= n <= 50
+     * @throws SlotMachineException INVALID_AMOUNT si n es menor que 3 o mayor que 50
      */
-    public static void simulate(int n)
+    public static void simulate(int n) throws SlotMachine_Package.SlotMachineException
     {
         //Validacion inicial del problema
         
         if(n < 3 || n > 50)
         {
-            return;
+            throw new SlotMachineException(SlotMachineException.INVALID_AMOUNT);
         }
 
         SlotMachine sm = new SlotMachine(n);

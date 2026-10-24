@@ -72,5 +72,7 @@ public class Lefty extends Wheel
         }
 
         placeSymbol(leftNeighbor.getCurrentSymbol().getColor());
+        getCurrentSymbol().onStop();
+        updateSymbol();
     }
 }

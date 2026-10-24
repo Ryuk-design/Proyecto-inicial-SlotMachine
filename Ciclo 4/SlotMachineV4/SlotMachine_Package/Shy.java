@@ -10,6 +10,7 @@ package SlotMachine_Package;
 public class Shy extends Symbol
 {
     private boolean hidden;
+    private static final int SIDE = 15;
 
     /**
      * Metodo constructor del simbolo shy
@@ -19,7 +20,7 @@ public class Shy extends Symbol
      */
     public Shy(String color, int x, int y)
     {
-        super(color, x, y);
+        super(color, new Rectangle(SIDE, SIDE, x, y, color));
         hidden = false;
     }
 
@@ -62,5 +63,11 @@ public class Shy extends Symbol
     public Symbol copy()
     {
         return new Shy(getColor(), 0, 0);
+    }
+    
+    @Override
+    public int getSize()
+    {
+        return SIDE;
     }
 }

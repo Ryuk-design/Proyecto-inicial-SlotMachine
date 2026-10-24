@@ -1,6 +1,5 @@
 package SlotMachine_Package;
 import java.util.ArrayList;
-import javax.swing.JOptionPane;
 import java.util.Random;
 
 /**
@@ -104,17 +103,6 @@ public class SlotMachine
     }
     
     /**
-     * En caso de que la maquina y sus componentes sean visibles, si el usuario intenta hacer una accion que desencadene en un error, el metodo se encarga de darle un mensaje de advertencia. 
-     */
-    private void showError(String message)
-    {
-        if(isVisible)
-        {
-            JOptionPane.showMessageDialog(null, message);
-        }
-    }
-    
-    /**
      * Calcula automaticamente las posiciones de cada Wheel
      */
     private void recalculatePositions()
@@ -195,14 +183,13 @@ public class SlotMachine
      * Elimina una rueda en una posicion determinada. 
      * @param pos posicion de la rueda a eliminar
      */
-    public void delWheel(int pos)
+    public void delWheel(int pos) throws SlotMachine_Package.SlotMachineException
     {
         lastOperationOk = false;
         
         if(wheels.size() == 0)
         {
-            showError("No hay ruedas existentes");
-            return;
+            throw new SlotMachineException(SlotMachineException.NO_WHEELS);
         }
         
         // Refactorizacion CICLO 4
@@ -211,8 +198,7 @@ public class SlotMachine
         // Validacion CICLO 4 para rueda rebel
         if(!wheels.get(pos - 1).canDelete())
         {
-            showError("Esta rueda no se deja eliminar");
-            return;
+            throw new SlotMachineException(SlotMachineException.WHEEL_CANNOT_DELETE);
         }
         
         wheels.get(pos - 1).makeInvisible();
@@ -223,8 +209,11 @@ public class SlotMachine
     
     /**
      * Agrega un Symbol con un color existente que no haya sido usado con anterioridad.
+     * @param pos posicion donde se agregara el simbolo
+     * @param color del simbolo
+     * @throws SlotMachineException INVALID_COLOR si el color ya esta siendo utilizado o no existe
      */
-    public void addSymbol(int pos, String color)
+    public void addSymbol(int pos, String color) throws SlotMachineException
     {
         addSymbol("normal", pos, color);
     }
@@ -234,8 +223,9 @@ public class SlotMachine
      * @param type tipo de simbolo, puede ser "shy" o "ephemeral"
      * @param pos posicion donde se agregara el simbolo
      * @param color del simbolo
+     * @throws SlotMachineException INVALID_COLOR si el color ya esta siendo utilizado o no existe
      */
-    public void addSymbol(String type, int pos, String color)
+    public void addSymbol(String type, int pos, String color) throws SlotMachineException
     {
         lastOperationOk = false;
         Symbol sym;
@@ -255,8 +245,7 @@ public class SlotMachine
     
         if(availableColors.contains(color) == false)
         {
-            showError("El color que se busca asignar a un nuevo simbolo ya esta siendo utilizado o el color no existe");
-            return;
+            throw new SlotMachineException(SlotMachineException.INVALID_COLOR);
         }
     
         pos = recalculateIndexes(pos, 'a', 's');
@@ -272,9 +261,12 @@ public class SlotMachine
     }
     
     /**
-     *  Elimina un Symbol de masterSymbols y a cada rueda y permite que el color que utilizaba el Symbol eliminado pueda ser reutilizado
+     * Elimina un Symbol de masterSymbols y a cada rueda y permite que el color que utilizaba el Symbol eliminado pueda ser reutilizado
+     * @param symbol color del simbolo a eliminar
+     * @throws SlotMachineException SOME_WHEEL_LOCKED si hay al menos una rueda bloqueada,
+     *                              SYMBOL_NOT_ASSIGNED si el color no corresponde a ningun simbolo de la maquina
      */
-    public void delSymbol(String symbol)
+    public void delSymbol(String symbol) throws SlotMachine_Package.SlotMachineException
     {
         lastOperationOk = false;
         
@@ -284,8 +276,7 @@ public class SlotMachine
         {
             if(wheels.get(i).getLocked())
             {
-                showError("No se pueden eliminar simbolos ya que hay al menos una rueda bloqueada");
-                return;
+                throw new SlotMachineException(SlotMachineException.SOME_WHEEL_LOCKED);
             }
         }
         //
@@ -313,21 +304,24 @@ public class SlotMachine
         
         if(!findSymbol)
         {
-            showError("El color del Simbolo que se busca eliminar no ha sido asignado aun");
+            throw new SlotMachineException(SlotMachineException.SYMBOL_NOT_ASSIGNED);
         }
     }
     
     /**
      * Obliga a una Wheel a mostrar un Symbol en especifico 
+     * @param wheel posicion de la rueda
+     * @param symbol color del simbolo que se quiere mostrar
+     * @throws SlotMachineException NO_WHEELS si la maquina no tiene ruedas,
+     *                              WHEEL_LOCKED si la rueda esta bloqueada
      */
-    public void placeSymbol(int wheel, String symbol)
+    public void placeSymbol(int wheel, String symbol) throws SlotMachineException
     {
         lastOperationOk = false;
         
         if(wheels.size() == 0)
         {
-            showError("No hay ruedas existentes");
-            return;
+            throw new SlotMachineException(SlotMachineException.NO_WHEELS);
         }
         
         // Refactorizacion CICLO 4
@@ -337,8 +331,7 @@ public class SlotMachine
         // Verifica si la rueda que se le quiere cambiar el simbolo esta bloqueada
         if(getWheel(wheel).getLocked())
         {
-            showError("La rueda esta bloqueada, entonces no se le puede forzar un simbolo a mostrar");
-            return;
+            throw new SlotMachineException(SlotMachineException.WHEEL_LOCKED);
         }
         
         boolean res = wheels.get(wheel - 1).placeSymbol(symbol);
@@ -347,15 +340,17 @@ public class SlotMachine
     }
     
     /**
-     * Gira todas las Wheels
+     * Gira todas las ruedas
+     * @throws SlotMachineException NO_WHEELS si la maquina no tiene ruedas,
+     *                              SOME_WHEEL_LOCKED si hay al menos una rueda bloqueada
      */
-    public void spin(){
+    public void spin() throws SlotMachineException
+    {
         lastOperationOk = false;
         
         if(wheels.size() == 0)
         {
-            showError("No hay ruedas existentes");
-            return;
+            throw new SlotMachineException(SlotMachineException.NO_WHEELS);
         }
         
         // Agregacion de validacion CICLO 2 
@@ -364,8 +359,7 @@ public class SlotMachine
         {
             if(wheels.get(i).getLocked())
             {
-                showError("No se pueden girar todas las ruedas ya que hay al menos una bloqueada");
-                return;
+                throw new SlotMachineException(SlotMachineException.SOME_WHEEL_LOCKED);
             }
         }
         
@@ -380,15 +374,17 @@ public class SlotMachine
     
     /**
      * Gira una Wheel en especifico 
+     * @param wheel posicion de la rueda
+     * @throws SlotMachineException NO_WHEELS si la maquina no tiene ruedas,
+     *                              WHEEL_LOCKED si la rueda esta bloqueada
      */
-    public void spin(int wheel)
+    public void spin(int wheel) throws SlotMachine_Package.SlotMachineException
     {
         lastOperationOk = false;
         
         if(wheels.size() == 0)
         {
-            showError("No hay ruedas existentes");
-            return;
+            throw new SlotMachineException(SlotMachineException.NO_WHEELS);
         }
         
         // Refactorizacion CICLO 4
@@ -398,8 +394,7 @@ public class SlotMachine
         // Verifica si la rueda esta bloqueada
         if(getWheel(wheel).getLocked())
         {
-            showError("La rueda esta bloqueada, entonces no se puede girar");
-            return;
+            throw new SlotMachineException(SlotMachineException.WHEEL_LOCKED);
         }
         
         getWheel(wheel).spin();
@@ -512,14 +507,13 @@ public class SlotMachine
      * @param wheel1 posicion de la primera rueda
      * @param wheel2 posicion de la segunda rueda
      */
-    public void swap(int wheel1, int wheel2)
+    public void swap(int wheel1, int wheel2) throws SlotMachine_Package.SlotMachineException
     {
         lastOperationOk = false;
         
         if(wheels.size() == 0)
         {
-            showError("No hay ruedas existentes");
-            return;
+            throw new SlotMachineException(SlotMachineException.NO_WHEELS);
         }
         
         //Refactorizacion CICLO 4
@@ -529,8 +523,7 @@ public class SlotMachine
         //Validacion CICLO 4 para rueda rebel
         if(!getWheel(wheel1).canSwap() || !getWheel(wheel2).canSwap())
         {
-            showError("Una de las ruedas no se deja intercambiar");
-            return;
+            throw new SlotMachineException(SlotMachineException.WHEEL_CANNOT_SWAP);
         }
         
         if(wheel1 == wheel2)
@@ -552,15 +545,17 @@ public class SlotMachine
     /**
      * Bloquea una rueda
      * @param wheel posicion de la rueda
+     * @throws NO_WHEELS si la maquina no tiene ruedas,
+     *         WHEEL_CANNOT_LOCK si la rueda no se deja bloquear (rebel),
+     *         WHEEL_ALREADY_LOCKED si la rueda ya esta bloqueada
      */
-    public void lock(int wheel)
+    public void lock(int wheel) throws SlotMachine_Package.SlotMachineException
     {
         lastOperationOk = false;
         
         if(wheels.size() == 0)
         {
-            showError("No hay ruedas existentes");
-            return;
+            throw new SlotMachineException(SlotMachineException.NO_WHEELS);
         }
         
         //Refactorizacion CICLO 4
@@ -569,14 +564,12 @@ public class SlotMachine
         //Validacion CICLO 4 para rueda rebel
         if(!getWheel(wheel).canLock())
         {
-            showError("Esta rueda no se deja bloquear");
-            return;
+            throw new SlotMachineException(SlotMachineException.WHEEL_CANNOT_LOCK);
         }
         
         if(getWheel(wheel).getLocked())
         {
-            showError("La rueda ya esta bloqueada");
-            return;
+            throw new SlotMachineException(SlotMachineException.WHEEL_ALREADY_LOCKED);
         }
         
         getWheel(wheel).setLocked(true);
@@ -586,15 +579,16 @@ public class SlotMachine
     /**
      * Desbloquea una rueda bloqueada
      * @param wheel posicion de la rueda
+     * @throws SlotMachineException NO_WHEELS si la maquina no tiene ruedas,
+     *                              WHEEL_ALREADY_UNLOCKED si la rueda ya esta desbloqueada
      */
-    public void unlock(int wheel)
+    public void unlock(int wheel) throws SlotMachine_Package.SlotMachineException
     {
         lastOperationOk = false;
         
         if(wheels.size() == 0)
         {
-            showError("No hay ruedas existentes");
-            return;
+            throw new SlotMachineException(SlotMachineException.NO_WHEELS);
         }
         
         //Refactorizacion CICLO 4
@@ -602,8 +596,7 @@ public class SlotMachine
         
         if(!getWheel(wheel).getLocked())
         {
-            showError("La rueda ya esta desbloqueada");
-            return;
+            throw new SlotMachineException(SlotMachineException.WHEEL_ALREADY_UNLOCKED);
         }
         
         getWheel(wheel).setLocked(false);
@@ -615,14 +608,13 @@ public class SlotMachine
      * @param wheel posicion de la rueda
      * @param steps cantidad de pasos
      */
-    public void spin(int wheel, int steps)
+    public void spin(int wheel, int steps) throws SlotMachine_Package.SlotMachineException
     {   
         lastOperationOk = false;
         
         if(wheels.size() == 0)
         {
-            showError("No hay ruedas existentes");
-            return;
+            throw new SlotMachineException(SlotMachineException.NO_WHEELS);
         }
         
         if(steps == 0)
@@ -633,16 +625,14 @@ public class SlotMachine
         
         if(masterSymbols.size() == 0)
         {
-            showError("No hay simbolos sobre los cuales caminar");
-            return;
+            throw new SlotMachineException(SlotMachineException.NO_SYMBOLS_TO_WALK);
         }
         
         wheel = recalculateIndexes(wheel, 's', 'w');
         
         if(getWheel(wheel).getLocked())
         {
-            showError("La rueda esta bloqueada y no se puede girar");
-            return;
+            throw new SlotMachineException(SlotMachineException.WHEEL_LOCKED);
         }
         
         /**
@@ -658,27 +648,28 @@ public class SlotMachine
     /**
      * Configura los simbolos de las ruedas de la maquina
      * @param configuracion de colores de simbolos
+     * @throws SlotMachineException NO_WHEELS si la maquina no tiene ruedas,
+     *                              INVALID_CONFIGURATION si la configuracion es mayor que los simbolos existentes,
+     *                              no coincide con la cantidad de ruedas o no coincide con los simbolos de la maquina,
+     *                              SOME_WHEEL_LOCKED si hay al menos una rueda bloqueada
      */
-    public void spin(String[]setSymbols)
+    public void spin(String[]setSymbols) throws SlotMachine_Package.SlotMachineException
     {
         lastOperationOk = false;
 
         if(wheels.size() == 0)
         {
-            showError("No hay ruedas disponibles para configurar");
-            return;
+            throw new SlotMachineException(SlotMachineException.NO_WHEELS);
         }
         
         if(masterSymbols.size() < setSymbols.length)
         {
-            showError("la configuracion enviada es mayor que la cantidad de simbolos existentes");
-            return;
+            throw new SlotMachineException(SlotMachineException.INVALID_CONFIGURATION);
         }
         
         if(wheels.size() < setSymbols.length || wheels.size() > setSymbols.length)
         {
-            showError("La configuracion enviada no coincide con la cantidad de ruedas existentes");
-            return;
+            throw new SlotMachineException(SlotMachineException.INVALID_CONFIGURATION);
         }
         
         int count = 0;
@@ -696,16 +687,14 @@ public class SlotMachine
         
         if(!(count == setSymbols.length))
         {
-            showError("la configuracion enviada no coincide en su totalidad con los simbolos presentes en las ruedas");
-            return;
+            throw new SlotMachineException(SlotMachineException.INVALID_CONFIGURATION);
         }
         
         for(int i = 0; i < wheels.size(); i++)
         {
             if(wheels.get(i).getLocked())
             {
-                showError("No se puede cambiar la configuracion de las ruedas ya que hay al menos una bloqueada");
-                return;
+                throw new SlotMachineException(SlotMachineException.SOME_WHEEL_LOCKED);
             }
         }
         
@@ -721,13 +710,14 @@ public class SlotMachine
      * Getter de rueda
      * @param posicion de la rueda
      * @return rueda
+     * @throws SlotMachineException NO_WHEELS si la maquina no tiene ruedas
      */
-    public Wheel getWheel(int wheel)
+    public Wheel getWheel(int wheel) throws SlotMachineException
     {
         // Nueva condicion ciclo 3
         if(wheels.size() == 0)
         {
-            throw new IllegalArgumentException("SlotMachine no tiene ruedas");
+            throw new SlotMachineException(SlotMachineException.NO_WHEELS);
         }
         
         wheel = recalculateIndexes(wheel, 'g', 'w');
@@ -740,13 +730,14 @@ public class SlotMachine
      * Getter de simbolo
      * @param posicion del simbolo
      * @return simbolo
+     * @throws SlotMachineException si la maquina no tiene simbolos
      */
-    public Symbol getSymbol(int pos)
+    public Symbol getSymbol(int pos) throws SlotMachineException
     {
         // Nueva condicion ciclo 3
         if(masterSymbols.size() == 0)
         {
-            throw new IllegalArgumentException("SlotMachine no tiene simbolos");
+            throw new SlotMachineException(SlotMachineException.NO_SYMBOLS);
         }
         
         if(pos < 1)
@@ -767,8 +758,9 @@ public class SlotMachine
     /**
      * Crea una instancia de SlotMachine con un numero igual de ruedas y simbolos con color aleatorio, gira las ruedas para que inicialicen aleatoriamente
      * @param n numero de ruedas
+     * @throws SlotMachineException NO_WHEELS si n es menor que 1, porque no se crea ninguna rueda que girar
      */
-    public SlotMachine(int n)
+    public SlotMachine(int n) throws SlotMachineException
     { 
         wheels = new ArrayList<Wheel>();
         masterSymbols = new ArrayList<Symbol>();

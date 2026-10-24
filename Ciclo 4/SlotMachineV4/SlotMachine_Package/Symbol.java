@@ -12,10 +12,10 @@ package SlotMachine_Package;
  */
 public class Symbol
 {
-    private Circle figure;
+    protected Shape figure;
     private String color;
     private boolean isVisible;
-    public static final int DIAMETER = 20;
+    public static final int SIZE = 20;
 
     /**
      * Metodo constructor del simbolo
@@ -26,7 +26,14 @@ public class Symbol
     public Symbol(String color, int x, int y)
     {
         this.color = color;
-        figure = new Circle(DIAMETER, x, y, this.color);
+        figure = new Circle(SIZE, x, y, this.color);
+        isVisible = false;
+    }
+    
+    protected Symbol(String color, Shape figure)
+    {
+        this.color = color;
+        this.figure = figure;
         isVisible = false;
     }
     
@@ -47,7 +54,6 @@ public class Symbol
         figure.makeVisible();
         isVisible = true;
     }
-    
 
     /**
      * Hace invisible el simbolo
@@ -97,9 +103,9 @@ public class Symbol
     /**
      * Consulta el diametro del simbolo
      */
-    public int getDiameter()
+    public int getSize()
     {
-        return DIAMETER;
+        return SIZE;
     }
     
     /**
@@ -128,14 +134,5 @@ public class Symbol
     public Symbol copy()
     {
         return new Symbol(getColor(), 0, 0);
-    }
-    
-    /**
-     * Cambia el diametro del circulo con el que se dibuja el simbolo
-     * @param diamenter nuevo diametro del circulo
-     */
-    protected void setDiameter(int diameter)
-    {
-        figure.changeSize(diameter);
     }
 }

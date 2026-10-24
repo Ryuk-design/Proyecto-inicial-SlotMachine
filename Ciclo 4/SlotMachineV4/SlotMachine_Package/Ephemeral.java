@@ -9,8 +9,8 @@ package SlotMachine_Package;
 public class Ephemeral extends Symbol
 {
     private static final int STEP = 4;
-    private static final int MIN_DIAMETER = 2;
-    private int diameter;
+    private static final int MIN_SIZE = 2;
+    private int size;
 
     /**
      * Metodo constructor del simbolo ephemeral
@@ -20,35 +20,35 @@ public class Ephemeral extends Symbol
      */
     public Ephemeral(String color, int x, int y)
     {
-        super(color, x, y);
-        diameter = DIAMETER;
+        super(color, new Triangle(SIZE, SIZE, x, y, color));
+        size = SIZE;
     }
     
     /**
      * Consulta el diametro del simbolo ephemeral
      */
     @Override
-    public int getDiameter()
+    public int getSize()
     {
-        return diameter;
+        return size;
     }
 
-    @Override
     /**
      * Acciones que realiza cada vez que el simbolo ephemeral es seleccionado por la rueda a la que pertenece 
      */
+    @Override
     public void onStop()
     {
-        if(diameter > MIN_DIAMETER)
+        if(size > MIN_SIZE)
         {
-            diameter = diameter - STEP;
+            size = size - STEP;
 
-            if(diameter < MIN_DIAMETER)
+            if(size < MIN_SIZE)
             {
-                diameter = MIN_DIAMETER;
+                size = MIN_SIZE;
             }
 
-            setDiameter(diameter);
+            ((Triangle) figure).changeSize(size, size);
         }
     }
     
@@ -60,5 +60,11 @@ public class Ephemeral extends Symbol
     public Symbol copy()
     {
         return new Ephemeral(getColor(), 0, 0);
+    }
+    
+    @Override
+    public void setPosition(int x, int y)
+    {
+        super.setPosition(x + size / 2, y);
     }
 }

@@ -17,7 +17,7 @@ public class SlotMachineTest
     //SwapTest
     
     @Test
-    public void AfCvShouldSwapTwoExistingWheels()
+    public void ShouldSwapTwoExistingWheels() throws SlotMachineException
     {
         machine = new SlotMachine();
         String[] col = {"red", "blue", "green", "yellow", "brown"};
@@ -36,7 +36,7 @@ public class SlotMachineTest
     }
 
     @Test
-    public void AfCvShouldNotSwapIfPositionsAreTheSame()
+    public void ShouldNotSwapIfPositionsAreTheSame() throws SlotMachineException
     {
         machine = new SlotMachine();
         String[] col = {"red", "blue", "green", "yellow", "brown"};
@@ -56,7 +56,7 @@ public class SlotMachineTest
     
     @Test
     //Si el indice es menor que uno, se reacomoda en la posicion 1.
-    public void AfCvShouldSwapIfIndexOutOfRange()
+    public void ShouldSwapIfIndexOutOfRange() throws SlotMachineException
     {
         machine = new SlotMachine();
         String[] col = {"red", "blue", "green", "yellow", "brown"};
@@ -77,7 +77,7 @@ public class SlotMachineTest
     
     @Test
     //Si el indice es mayor que el tamaño del arreglo, este se reacomoda al final del arreglo.
-    public void AfCvShouldSwapIfIndexOutOfRange2()
+    public void ShouldSwapIfIndexOutOfRange2() throws SlotMachineException
     {
         machine = new SlotMachine();
         String[] col = {"red", "blue", "green", "yellow", "brown"};
@@ -98,7 +98,7 @@ public class SlotMachineTest
     //LockTest
     
     @Test
-    public void AfCvShouldLockUnlockedWheel()
+    public void ShouldLockUnlockedWheel() throws SlotMachineException
     {   
         machine = new SlotMachine();
         String[] col = {"red", "blue", "green", "yellow", "brown"};
@@ -116,7 +116,7 @@ public class SlotMachineTest
     }
     
     @Test
-    public void AfCvShouldNotLockLockedWheel()
+    public void ShouldNotLockLockedWheel() throws SlotMachineException
     {
         machine = new SlotMachine();
         String[] col = {"red", "blue", "green", "yellow", "brown"};
@@ -129,14 +129,24 @@ public class SlotMachineTest
         
         int wtl = 1;
         machine.lock(wtl);
-        machine.lock(wtl);
+        
+        try
+        {
+            machine.lock(wtl);
+            fail();
+        }
+        catch(SlotMachineException e)
+        {
+            assertEquals(SlotMachineException.WHEEL_ALREADY_LOCKED, e.getMessage());
+        }
+        
         assertTrue(machine.getWheel(wtl).getLocked());
         assertFalse(machine.ok());
     }
     
     @Test
     //Si el indice es menor que uno, se reacomoda en la posicion 1.
-    public void AfCvLockWheelIfIndexOutOfRange()
+    public void LockWheelIfIndexOutOfRange() throws SlotMachineException
     {
         machine = new SlotMachine();
         String[] col = {"red", "blue", "green", "yellow", "brown"};
@@ -155,7 +165,7 @@ public class SlotMachineTest
     
     @Test
     //Si el indice es mayor que el tamaño del arreglo, este se reacomoda al final del arreglo.
-    public void AfCvShouldLockWheelIfIndexOutOfRange2()
+    public void ShouldLockWheelIfIndexOutOfRange2() throws SlotMachineException
     {
         machine = new SlotMachine();
         String[] col = {"red", "blue", "green", "yellow", "brown"};
@@ -173,7 +183,7 @@ public class SlotMachineTest
     }
     
     @Test
-    public void AfCvShouldNotSpin1IfLocked()
+    public void ShouldNotSpin1IfLocked() throws SlotMachineException
     {
         machine = new SlotMachine();
         String[] col = {"red", "blue", "green", "yellow", "brown"};
@@ -187,12 +197,22 @@ public class SlotMachineTest
         int wtl = 1;
         machine.lock(wtl);
         assertTrue(machine.getWheel(wtl).getLocked());
-        machine.spin();
+        
+        try
+        {
+            machine.spin();
+            fail();
+        }
+        catch(SlotMachineException e)
+        {
+            assertEquals(SlotMachineException.SOME_WHEEL_LOCKED, e.getMessage());
+        }
+        
         assertFalse(machine.ok());
     }
     
     @Test
-    public void AfCvShouldNotSpin2IfLocked()
+    public void ShouldNotSpin2IfLocked() throws SlotMachineException
     {
         machine = new SlotMachine();
         String[] col = {"red", "blue", "green", "yellow", "brown"};
@@ -206,12 +226,22 @@ public class SlotMachineTest
         int wtl = 1;
         machine.lock(wtl);
         assertTrue(machine.getWheel(wtl).getLocked());
-        machine.spin(wtl);
+        
+        try
+        {
+            machine.spin(wtl);
+            fail();
+        }
+        catch(SlotMachineException e)
+        {
+            assertEquals(SlotMachineException.WHEEL_LOCKED, e.getMessage());
+        }
+        
         assertFalse(machine.ok());
     }
     
     @Test
-    public void AfCvShouldNotPlaceSymbolIfLocked()
+    public void ShouldNotPlaceSymbolIfLocked() throws SlotMachineException
     {
         machine = new SlotMachine();
         String[] col = {"red", "blue", "green", "yellow", "brown"};
@@ -225,12 +255,22 @@ public class SlotMachineTest
         int wtl = 1;
         machine.lock(wtl);
         assertTrue(machine.getWheel(wtl).getLocked());
-        machine.placeSymbol(wtl, "red");
+        
+        try
+        {
+            machine.placeSymbol(wtl, "red");
+            fail();
+        }
+        catch(SlotMachineException e)
+        {
+            assertEquals(SlotMachineException.WHEEL_LOCKED, e.getMessage());
+        }
+        
         assertFalse(machine.ok());
     }
 
     @Test
-    public void AfCvShouldNotSpinStepsIfLocked()
+    public void ShouldNotSpinStepsIfLocked() throws SlotMachineException
     {
         machine = new SlotMachine();
         String[] col = {"red", "blue", "green", "yellow", "brown"};
@@ -244,12 +284,22 @@ public class SlotMachineTest
         int wtl = 1;
         machine.lock(wtl);
         assertTrue(machine.getWheel(wtl).getLocked());
-        machine.spin(wtl, 3);
+        
+        try
+        {
+            machine.spin(wtl, 3);
+            fail();
+        }
+        catch(SlotMachineException e)
+        {
+            assertEquals(SlotMachineException.WHEEL_LOCKED, e.getMessage());
+        }
+
         assertFalse(machine.ok());
     }
     
     @Test
-    public void AfCvShouldNotsetSymbolsIfLocked()
+    public void ShouldNotsetSymbolsIfLocked() throws SlotMachineException
     {
         machine = new SlotMachine();
         String[] col = {"red", "blue", "green", "yellow", "brown"};
@@ -264,12 +314,21 @@ public class SlotMachineTest
         machine.lock(wtl);
         assertTrue(machine.getWheel(wtl).getLocked());
         String[] a = {"red"};
-        machine.spin(a);
+        try
+        {
+            machine.spin(a);
+            fail();
+        }
+        catch(SlotMachineException e)
+        {
+            assertEquals(SlotMachineException.SOME_WHEEL_LOCKED, e.getMessage());
+        }
+        
         assertFalse(machine.ok());
     }
     
     @Test
-    public void AfCvShouldAddSymbolIfLocked()
+    public void ShouldAddSymbolIfLocked() throws SlotMachineException
     {
         machine = new SlotMachine();
         String[] col = {"red", "blue", "green", "yellow", "brown"};
@@ -290,7 +349,7 @@ public class SlotMachineTest
     }
     
     @Test
-    public void AfCvShouldNotDeleteSymbolIfLocked()
+    public void ShouldNotDeleteSymbolIfLocked() throws SlotMachineException
     {
         machine = new SlotMachine();
         String[] col = {"red", "blue", "green", "yellow", "brown"};
@@ -305,14 +364,24 @@ public class SlotMachineTest
         machine.placeSymbol(wtl, "red");
         machine.lock(wtl);
         assertTrue(machine.getWheel(wtl).getLocked());
-        machine.delSymbol("red");
+
+        try
+        {
+            machine.delSymbol("red");
+            fail();
+        }
+        catch(SlotMachineException e)
+        {
+            assertEquals(SlotMachineException.SOME_WHEEL_LOCKED, e.getMessage());
+        }
+        
         assertEquals(machine.getWheel(wtl).getCurrentSymbol().getColor(), "red");
     }
     
     //UnlockTest
     
     @Test
-    public void AfCvShouldUnlockLockedWheel()
+    public void ShouldUnlockLockedWheel() throws SlotMachineException
     {   
         machine = new SlotMachine();
         String[] col = {"red", "blue", "green", "yellow", "brown"};
@@ -331,7 +400,7 @@ public class SlotMachineTest
     }
     
     @Test
-    public void AfCvShouldNotUnlockUnlockedWheel()
+    public void ShouldNotUnlockUnlockedWheel() throws SlotMachineException
     {
         machine = new SlotMachine();
         String[] col = {"red", "blue", "green", "yellow", "brown"};
@@ -343,14 +412,24 @@ public class SlotMachineTest
         }
         
         int wtl = 1;
-        machine.unlock(wtl);
+        
+        try
+        {
+            machine.unlock(wtl);
+            fail();
+        }
+        catch(SlotMachineException e)
+        {
+            assertEquals(SlotMachineException.WHEEL_ALREADY_UNLOCKED, e.getMessage());
+        }
+        
         assertFalse(machine.getWheel(wtl).getLocked());
         assertFalse(machine.ok());
     }
     
     @Test
     //Si el indice es menor que uno, se reacomoda en la posicion 1.
-    public void AfCvShouldUnlockWheelIfIndexOutOfRange()
+    public void ShouldUnlockWheelIfIndexOutOfRange() throws SlotMachineException
     {
         machine = new SlotMachine();
         String[] col = {"red", "blue", "green", "yellow", "brown"};
@@ -370,7 +449,7 @@ public class SlotMachineTest
     
     @Test
     //Si el indice es mayor que el tamaño del arreglo, este se reacomoda al final del arreglo.
-    public void AfCvShouldUnlockWheelIfIndexOutOfRange2()
+    public void ShouldUnlockWheelIfIndexOutOfRange2() throws SlotMachineException
     {
         machine = new SlotMachine();
         String[] col = {"red", "blue", "green", "yellow", "brown"};
@@ -392,7 +471,7 @@ public class SlotMachineTest
     
     @Test
     //Sustentacion Samuel
-    public void AfCvShouldSpinAnyNumberOfStepsInIntegerRange()
+    public void ShouldSpinAnyNumberOfStepsInIntegerRange() throws SlotMachineException
     {
         machine = new SlotMachine();
         
@@ -411,7 +490,7 @@ public class SlotMachineTest
     }
     
     @Test
-    public void AfCvShouldNotSpinIfThereIsNoSymbols()
+    public void ShouldNotSpinIfThereIsNoSymbols() throws SlotMachineException
     {
         machine = new SlotMachine();
         
@@ -427,13 +506,22 @@ public class SlotMachineTest
             machine.delSymbol(col[i - 1]);
         }
         
-        machine.spin(1, 12);
+        try
+        {
+            machine.spin(1, 12);
+            fail();
+        }
+        catch(SlotMachineException e)
+        {
+            assertEquals(SlotMachineException.NO_SYMBOLS_TO_WALK, e.getMessage());
+        }
+        
         assertFalse(machine.ok());
     }
     
     @Test
     //Si el indice es menor que uno, se reacomoda en la posicion 1.
-    public void AfCvShouldSpinIfIndexOutOfRange()
+    public void ShouldSpinIfIndexOutOfRange() throws SlotMachineException
     {
         machine = new SlotMachine();
         
@@ -452,7 +540,7 @@ public class SlotMachineTest
    
     @Test
     //Si el indice es mayor que el tamaño del arreglo, este se reacomoda al final del arreglo.
-    public void AfCvShouldSpinIfIndexOutOfRange2()
+    public void ShouldSpinIfIndexOutOfRange2() throws SlotMachineException
     {
         machine = new SlotMachine();
         
@@ -470,7 +558,7 @@ public class SlotMachineTest
     }
     
     @Test
-    public void AfCvShouldNotSpinIfWheelLocked()
+    public void ShouldNotSpinIfWheelLocked() throws SlotMachineException
     {
         machine = new SlotMachine();
         
@@ -483,7 +571,16 @@ public class SlotMachineTest
         
         machine.placeSymbol(1, "red");
         machine.lock(1);
-        machine.spin(1, 870);
+        try
+        {
+            machine.spin(1, 870);
+            fail();
+        }
+        catch(SlotMachineException e)
+        {
+            assertEquals(SlotMachineException.WHEEL_LOCKED, e.getMessage());
+        }
+        
         assertEquals(machine.getWheel(1).getCurrentSymbol().getColor(), "red");
         assertFalse(machine.ok());
     }
@@ -491,7 +588,7 @@ public class SlotMachineTest
     //SpinSetSymbolsTest
     
     @Test
-    public void AfCvShouldPutInSlotMachineTheGivenConfiguration()
+    public void ShouldPutInSlotMachineTheGivenConfiguration() throws SlotMachineException
     {
         machine = new SlotMachine();
         
@@ -513,7 +610,7 @@ public class SlotMachineTest
     }
     
     @Test
-    public void AfCvShouldNotPutInSlotMachineTheGivenConfigurationIfThereIsNoWheels()
+    public void ShouldNotPutInSlotMachineTheGivenConfigurationIfThereIsNoWheels() throws SlotMachineException
     {
         machine = new SlotMachine();
         
@@ -534,12 +631,21 @@ public class SlotMachineTest
             machine.delWheel(i);
         }
         
-        machine.spin(col2);
+        try
+        {
+            machine.spin(col2);
+            fail();
+        }
+        catch(SlotMachineException e)
+        {
+            assertEquals(SlotMachineException.NO_WHEELS, e.getMessage());
+        }
+        
         assertFalse(machine.ok());
     }
     
     @Test
-    public void AfCvShouldNotSpinIfConfigurationDoesNotBelongsToMasterSymbols()
+    public void ShouldNotSpinIfConfigurationDoesNotBelongsToMasterSymbols() throws SlotMachineException
     {
         machine = new SlotMachine();
         
@@ -556,13 +662,22 @@ public class SlotMachineTest
         }
         
         String[] conbef = machine.configuration();
-        machine.spin(col3);
+        try
+        {
+            machine.spin(col3);
+            fail();
+        }
+        catch(SlotMachineException e)
+        {
+            assertEquals(SlotMachineException.INVALID_CONFIGURATION, e.getMessage());
+        }
+        
         assertArrayEquals(conbef, machine.configuration());
         assertFalse(machine.ok());
     }
     
     @Test
-    public void AfCvShouldNotSpinIfWheelLocked2()
+    public void ShouldNotSpinIfWheelLocked2() throws SlotMachineException
     {
         machine = new SlotMachine();
         
@@ -580,7 +695,16 @@ public class SlotMachineTest
         
         String[] conbef = machine.configuration();
         machine.lock(3);
-        machine.spin(col2);
+        try
+        {
+            machine.spin(col2);
+            fail();
+        }
+        catch(SlotMachineException e)
+        {
+            assertEquals(SlotMachineException.SOME_WHEEL_LOCKED, e.getMessage());
+        }
+        
         assertArrayEquals(conbef, machine.configuration());
         assertFalse(machine.ok());
     }
