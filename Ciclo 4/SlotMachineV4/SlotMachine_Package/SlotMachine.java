@@ -50,7 +50,7 @@ public class SlotMachine
      */
     public boolean isJackpot()
     {
-        if (wheels.size() < 2)
+        if (wheels.size() < 3)
         {
             return false;
         }
