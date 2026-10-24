@@ -181,6 +181,8 @@ public class SlotMachine
     /**
      * Elimina una rueda en una posicion determinada. 
      * @param pos posicion de la rueda a eliminar
+     * @throws SlotMachineException NO_WHEELS si la maquina no tiene ruedas,
+     *                              WHEEL_CANNOT_DELETE si la rueda no puede ser eliminada
      */
     public void delWheel(int pos) throws SlotMachineException
     {
