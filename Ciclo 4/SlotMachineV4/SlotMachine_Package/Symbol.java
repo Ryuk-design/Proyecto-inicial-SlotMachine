@@ -30,6 +30,11 @@ public class Symbol
         isVisible = false;
     }
     
+    /**
+     * Metodo constructor del simbolo, lo usan las subclases para elegir la figura con la que se dibuja
+     * @param color asigna color al simbolo
+     * @param figure figura con la que se dibuja el simbolo (Rectangle, Circle, Triangle)
+     */
     protected Symbol(String color, Shape figure)
     {
         this.color = color;
@@ -92,6 +97,7 @@ public class Symbol
     
     /**
      * Consulta el estado de visibilidad del simbolo
+     * @return true si es visible, false si no es visible
      */
     public boolean isVisible()
     {
@@ -101,7 +107,8 @@ public class Symbol
     //Nuevos metodos ciclo 4 para el manejo de los simbolos ephemeral y shy
     
     /**
-     * Consulta el diametro del simbolo
+     * Consulta el tamaño del simbolo, el simbolo convencional se dibuja como un circulo, asi que el tamaño representa el diametro
+     * @return el tamaño del simbolo
      */
     public int getSize()
     {

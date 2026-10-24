@@ -12,7 +12,7 @@ import java.util.Random;
  * bloquear y desbloquear ruedas individualmente
  * consultar configuracion de ruedas, simbolos disponibles y si la maquina se encuentra en estado de Jackpot.
  * @author (Samuel Ahumada) 
- * @version (2.0)
+ * @version (5.0)
  */
 public class SlotMachine
 {
@@ -103,7 +103,7 @@ public class SlotMachine
     }
     
     /**
-     * Calcula automaticamente las posiciones de cada Wheel
+     * Calcula automaticamente las posiciones de cada Wheel al agregar o eliminar una rueda de cualquier tipo
      */
     private void recalculatePositions()
     {
@@ -401,7 +401,8 @@ public class SlotMachine
     }
     
     /**
-     * @return Retorna una lista conlos colores de los simbolos en el orden que estan en todas las Wheels iniciando por el 1
+     * Consulta los simbolos que estan en cada rueda de la maquina
+     * @return lista con los colores de los simbolos en el orden que estan en todas las Wheels iniciando por el 1
     */
     public String[] configuration()
     {
@@ -416,7 +417,8 @@ public class SlotMachine
     }
     
     /**
-     * @return retorna los colores de los Symbols en el orden que estan en masterSymbol iniciando por el 1
+     * Consulta el orden de la lista general de simbolos
+     * @return colores de los Symbols en el orden que estan en masterSymbol iniciando por el 1
      */
     public String[] symbols()
     {
@@ -432,6 +434,7 @@ public class SlotMachine
     
     /**
      * Cuantos colores distintos hay entre los Symbols que muestran las Wheels 
+     * @return cantidad de simbolos distintos
      */
     public int distinctSymbols()
     {
@@ -483,6 +486,9 @@ public class SlotMachine
         lastOperationOk = true;
     }
     
+    /**
+     * Cierra el simulador
+     */
     public void exit()
     {
         makeInvisible();
@@ -491,7 +497,8 @@ public class SlotMachine
     }
     
     /**
-     * @return getter de lastOperationOk 
+     * Consulta si la ultima operacion realizada fue exitosa
+     * @return estado de la ultima operacion realizada
      */
     public boolean ok()
     {
@@ -504,8 +511,10 @@ public class SlotMachine
      * Intercambia la posicion de dos ruedas.
      * @param wheel1 posicion de la primera rueda
      * @param wheel2 posicion de la segunda rueda
+     * @throws SlotMachineException NO_WHEELS si la maquina no tiene ruedas,
+     *                              WHEEL_CANNOT_SWAP si alguna de las dos ruedas no se deja intercambiar (rebel)
      */
-    public void swap(int wheel1, int wheel2) throws SlotMachine_Package.SlotMachineException
+    public void swap(int wheel1, int wheel2) throws SlotMachineException
     {
         lastOperationOk = false;
         
@@ -547,7 +556,7 @@ public class SlotMachine
      *         WHEEL_CANNOT_LOCK si la rueda no se deja bloquear (rebel),
      *         WHEEL_ALREADY_LOCKED si la rueda ya esta bloqueada
      */
-    public void lock(int wheel) throws SlotMachine_Package.SlotMachineException
+    public void lock(int wheel) throws SlotMachineException
     {
         lastOperationOk = false;
         
@@ -580,7 +589,7 @@ public class SlotMachine
      * @throws SlotMachineException NO_WHEELS si la maquina no tiene ruedas,
      *                              WHEEL_ALREADY_UNLOCKED si la rueda ya esta desbloqueada
      */
-    public void unlock(int wheel) throws SlotMachine_Package.SlotMachineException
+    public void unlock(int wheel) throws SlotMachineException
     {
         lastOperationOk = false;
         
@@ -605,8 +614,11 @@ public class SlotMachine
      * Cambia el simbolo de una rueda segun la cantidad indicada de pasos
      * @param wheel posicion de la rueda
      * @param steps cantidad de pasos
+     * @throws SlotMachineException NO_WHEELS si la maquina no tiene ruedas,
+     *                              NO_SYMBOLS_TO_WALK si la maquina no tiene simbolos sobre los cuales caminar,
+     *                              WHEEL_LOCKED si la rueda esta bloqueada
      */
-    public void spin(int wheel, int steps) throws SlotMachine_Package.SlotMachineException
+    public void spin(int wheel, int steps) throws SlotMachineException
     {   
         lastOperationOk = false;
         
@@ -707,7 +719,7 @@ public class SlotMachine
     /**
      * Getter de rueda
      * @param posicion de la rueda
-     * @return rueda
+     * @return rueda correspondiente a la posicion recibida
      * @throws SlotMachineException NO_WHEELS si la maquina no tiene ruedas
      */
     public Wheel getWheel(int wheel) throws SlotMachineException
@@ -727,7 +739,7 @@ public class SlotMachine
     /**
      * Getter de simbolo
      * @param posicion del simbolo
-     * @return simbolo
+     * @return simbolo correspondiente a la posicion recibida
      * @throws SlotMachineException si la maquina no tiene simbolos
      */
     public Symbol getSymbol(int pos) throws SlotMachineException
@@ -785,6 +797,7 @@ public class SlotMachine
      * Recalcula los indices dependiendo de la operacion y el objeto
      * @param op la operacion puede ser: add 'a', delete 'd', spin o swap's', unlock 'u', lock'l'. 'd', 's', 'u' y 'l' hacen lo mismo
      * @param obj el recalculo de los indices depende de si el objeto es un simbolo o una rueda 's' o 'r'
+     * @return el indice recalculado
      */
     private int recalculateIndexes(int index, char op, char obj)
     {

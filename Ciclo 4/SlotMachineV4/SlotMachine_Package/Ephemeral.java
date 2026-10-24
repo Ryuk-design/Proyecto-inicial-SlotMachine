@@ -25,7 +25,8 @@ public class Ephemeral extends Symbol
     }
     
     /**
-     * Consulta el diametro del simbolo ephemeral
+     * Consulta el tamaño del simbolo ephemeral, en este caso representa la altura y el ancho de la base
+     * @return el tamaño del simbolo 
      */
     @Override
     public int getSize()
@@ -62,6 +63,11 @@ public class Ephemeral extends Symbol
         return new Ephemeral(getColor(), 0, 0);
     }
     
+    /**
+     * Cambia la posicion del simbolo ephemeral
+     * @param x posicion horizontal
+     * @param y posicion vertical
+     */
     @Override
     public void setPosition(int x, int y)
     {

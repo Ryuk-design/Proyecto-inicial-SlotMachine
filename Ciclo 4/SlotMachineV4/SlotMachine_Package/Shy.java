@@ -65,6 +65,10 @@ public class Shy extends Symbol
         return new Shy(getColor(), 0, 0);
     }
     
+    /**
+     * Consulta el tamaño del simbolo, el simbolo convencional shy se dibuja como un cuadrado asi que SIDE representa el tamaño del lado del cuadrado
+     * @return el tamaño del simbolo
+     */
     @Override
     public int getSize()
     {
