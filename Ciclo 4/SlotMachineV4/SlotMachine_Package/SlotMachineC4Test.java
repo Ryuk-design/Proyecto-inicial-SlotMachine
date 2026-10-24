@@ -23,7 +23,7 @@ public class SlotMachineC4Test
         }
         
         machine.addWheel(1);
-        machine.addWheel("lefty", 2);
+        machine.addWheel("Lefty", 2);
         
         for(int i = 0; i < 20; i++)
         {
@@ -46,7 +46,7 @@ public class SlotMachineC4Test
         }
         
         machine.addWheel(1);
-        machine.addWheel("lefty", 2);
+        machine.addWheel("Lefty", 2);
         machine.placeSymbol(1, "red");
         machine.placeSymbol(2, "blue");
         machine.spin(2);
@@ -65,7 +65,7 @@ public class SlotMachineC4Test
         }
         
         machine.addWheel(1);
-        machine.addWheel("lefty", 2);
+        machine.addWheel("Lefty", 2);
         machine.placeSymbol(1, "green");
         machine.placeSymbol(2, "red");
         machine.spin(2, 1);
@@ -84,7 +84,7 @@ public class SlotMachineC4Test
         }
         
         machine.addWheel(1);
-        machine.addWheel("lefty", 2);
+        machine.addWheel("Lefty", 2);
         machine.placeSymbol(1, "red");
         machine.placeSymbol(2, "blue");
         machine.spin(1, 2);
@@ -103,7 +103,7 @@ public class SlotMachineC4Test
         }
         
         machine.addWheel(1);
-        machine.addWheel("lefty", 2);
+        machine.addWheel("Lefty", 2);
         machine.placeSymbol(1, "red");
         machine.placeSymbol(2, "blue");
         machine.lock(2);
@@ -134,7 +134,7 @@ public class SlotMachineC4Test
         
         machine.addWheel(1);
         machine.addWheel(2);
-        machine.addWheel("lefty", 3);
+        machine.addWheel("Lefty", 3);
         machine.placeSymbol(1, "red");
         machine.placeSymbol(2, "green");
         machine.placeSymbol(3, "blue");
@@ -148,7 +148,7 @@ public class SlotMachineC4Test
     {
         machine = new SlotMachine();
         machine.addWheel(1);
-        machine.addWheel("lefty", 2);
+        machine.addWheel("Lefty", 2);
         machine.spin(2);
         assertTrue(machine.ok());
     }
@@ -165,7 +165,7 @@ public class SlotMachineC4Test
             machine.addSymbol(i, col[i - 1]);
         }
         
-        machine.addWheel("rebel", 1);
+        machine.addWheel("Rebel", 1);
         
         try
         {
@@ -192,7 +192,7 @@ public class SlotMachineC4Test
         }
         
         machine.addWheel(1);
-        machine.addWheel("rebel", 2);
+        machine.addWheel("Rebel", 2);
         machine.placeSymbol(1, "red");
         machine.placeSymbol(2, "blue");
         String[] orig = machine.configuration();
@@ -221,7 +221,7 @@ public class SlotMachineC4Test
             machine.addSymbol(i, col[i - 1]);
         }
         
-        machine.addWheel("rebel", 1);
+        machine.addWheel("Rebel", 1);
         
         try
         {
@@ -243,7 +243,7 @@ public class SlotMachineC4Test
     public void AfEphemeralShouldGetSmallerOnSpin() throws SlotMachineException
     {
         machine = new SlotMachine();
-        machine.addSymbol("ephemeral", 1, "red");
+        machine.addSymbol("Ephemeral", 1, "red");
         machine.addWheel(1);
         int before = machine.getWheel(1).getCurrentSymbol().getSize();
         machine.spin();
@@ -256,7 +256,7 @@ public class SlotMachineC4Test
     public void AfEphemeralShouldStopGettingSmaller() throws SlotMachineException
     {
         machine = new SlotMachine();
-        machine.addSymbol("ephemeral", 1, "red");
+        machine.addSymbol("Ephemeral", 1, "red");
         machine.addWheel(1);
         
         for(int i = 0; i < 50; i++)
@@ -287,7 +287,7 @@ public class SlotMachineC4Test
     public void AfShyShouldChangeVisibilityOnEverySpin() throws SlotMachineException
     {
         machine = new SlotMachine();
-        machine.addSymbol("shy", 1, "red");
+        machine.addSymbol("Shy", 1, "red");
         machine.addWheel(1);
         assertFalse(machine.getWheel(1).getCurrentSymbol().isHidden());
         machine.spin();
@@ -302,7 +302,7 @@ public class SlotMachineC4Test
     public void AfShyShouldNotToggleOnPlaceSymbol() throws SlotMachineException
     {
         machine = new SlotMachine();
-        machine.addSymbol("shy", 1, "red");
+        machine.addSymbol("Shy", 1, "red");
         machine.addWheel(1);
         machine.placeSymbol(1, "red");
         assertFalse(machine.getWheel(1).getCurrentSymbol().isHidden());

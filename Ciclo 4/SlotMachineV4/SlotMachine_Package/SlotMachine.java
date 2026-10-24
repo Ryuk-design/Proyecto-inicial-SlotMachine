@@ -131,33 +131,32 @@ public class SlotMachine
     /**
      * Agrega una nueva rueda normal a SlotMachine
      * @param pos posicion donde se insertara la rueda
+     * @throws SlotMachineException INVALID_WHEEL_TYPE si el tipo de rueda no existe o no se puede crear
      */
-    public void addWheel(int pos)
+    public void addWheel(int pos) throws SlotMachineException
     {
-        addWheel("normal", pos);
+        addWheel("Wheel", pos);
     }
     
     /**
      * Agrega una nueva rueda del tipo elegido a SlotMachine
      * @param type tipo de rueda, "lefty" o "rebel", cualquier otro valor crea una rueda normal
      * @param pos posicion donde se insertara la rueda
+     * @throws SlotMachineException INVALID_WHEEL_TYPE si el tipo de rueda no existe o no se puede crear
      */
-    public void addWheel(String type, int pos)
+    public void addWheel(String type, int pos) throws SlotMachineException
     {
         lastOperationOk = false;
         Wheel whl;
     
-        if("lefty".equals(type))
+        try
         {
-            whl = new Lefty(0, 0);
+            Class<?> cls = Class.forName("SlotMachine_Package." + type);
+            whl = (Wheel) cls.getConstructor(int.class, int.class).newInstance(0, 0);
         }
-        else if("rebel".equals(type))
+        catch(ReflectiveOperationException e)
         {
-            whl = new Rebel(0, 0);
-        }
-        else
-        {
-            whl = new Wheel(0, 0);
+            throw new SlotMachineException(SlotMachineException.INVALID_WHEEL_TYPE, e);
         }
     
         // Refactorizacion CICLO 4
@@ -183,7 +182,7 @@ public class SlotMachine
      * Elimina una rueda en una posicion determinada. 
      * @param pos posicion de la rueda a eliminar
      */
-    public void delWheel(int pos) throws SlotMachine_Package.SlotMachineException
+    public void delWheel(int pos) throws SlotMachineException
     {
         lastOperationOk = false;
         
@@ -211,11 +210,12 @@ public class SlotMachine
      * Agrega un Symbol con un color existente que no haya sido usado con anterioridad.
      * @param pos posicion donde se agregara el simbolo
      * @param color del simbolo
-     * @throws SlotMachineException INVALID_COLOR si el color ya esta siendo utilizado o no existe
+     * @throws SlotMachineException INVALID_COLOR si el color ya esta siendo utilizado o no existe,
+     *                              INVALID_SYMBOL_TYPE si el tipo de simbolo no existe o no se puede crear
      */
     public void addSymbol(int pos, String color) throws SlotMachineException
     {
-        addSymbol("normal", pos, color);
+        addSymbol("Symbol", pos, color);
     }
     
     /**
@@ -223,24 +223,22 @@ public class SlotMachine
      * @param type tipo de simbolo, puede ser "shy" o "ephemeral"
      * @param pos posicion donde se agregara el simbolo
      * @param color del simbolo
-     * @throws SlotMachineException INVALID_COLOR si el color ya esta siendo utilizado o no existe
+     * @throws SlotMachineException INVALID_COLOR si el color ya esta siendo utilizado o no existe,
+     *                              INVALID_SYMBOL_TYPE si el tipo de simbolo no existe o no se puede crear
      */
     public void addSymbol(String type, int pos, String color) throws SlotMachineException
     {
         lastOperationOk = false;
         Symbol sym;
     
-        if("ephemeral".equals(type))
+        try
         {
-            sym = new Ephemeral(color, 0, 0);
+            Class<?> cls = Class.forName(Symbol.class.getPackageName() + "." + type);
+            sym = (Symbol) cls.getConstructor(String.class, int.class, int.class).newInstance(color, 0, 0);
         }
-        else if("shy".equals(type))
+        catch(ReflectiveOperationException e)
         {
-            sym = new Shy(color, 0, 0);
-        }
-        else
-        {
-            sym = new Symbol(color, 0, 0);
+            throw new SlotMachineException(SlotMachineException.INVALID_SYMBOL_TYPE, e);
         }
     
         if(availableColors.contains(color) == false)
