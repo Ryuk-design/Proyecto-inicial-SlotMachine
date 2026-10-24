@@ -140,7 +140,7 @@ public class SlotMachine
     
     /**
      * Agrega una nueva rueda del tipo elegido a SlotMachine
-     * @param type tipo de rueda, "lefty" o "rebel", cualquier otro valor crea una rueda normal
+     * @param type tipo de rueda, "Lefty", "Rebel" o "Wheel"
      * @param pos posicion donde se insertara la rueda
      * @throws SlotMachineException INVALID_WHEEL_TYPE si el tipo de rueda no existe o no se puede crear
      */
@@ -156,7 +156,7 @@ public class SlotMachine
         }
         catch(ReflectiveOperationException e)
         {
-            throw new SlotMachineException(SlotMachineException.INVALID_WHEEL_TYPE, e);
+            throw new SlotMachineException(SlotMachineException.INVALID_WHEEL_TYPE);
         }
     
         // Refactorizacion CICLO 4
@@ -220,7 +220,7 @@ public class SlotMachine
     
     /**
      * Agrega un Symbol con un color existente que no haya sido usado con anterioridad.
-     * @param type tipo de simbolo, puede ser "shy" o "ephemeral"
+     * @param type tipo de simbolo, puede ser "Shy", "Ephemeral" o Symbol
      * @param pos posicion donde se agregara el simbolo
      * @param color del simbolo
      * @throws SlotMachineException INVALID_COLOR si el color ya esta siendo utilizado o no existe,
@@ -238,7 +238,7 @@ public class SlotMachine
         }
         catch(ReflectiveOperationException e)
         {
-            throw new SlotMachineException(SlotMachineException.INVALID_SYMBOL_TYPE, e);
+            throw new SlotMachineException(SlotMachineException.INVALID_SYMBOL_TYPE);
         }
     
         if(availableColors.contains(color) == false)
